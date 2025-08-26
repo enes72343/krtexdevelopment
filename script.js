@@ -4,13 +4,15 @@ const ctx = canvas.getContext("2d");
 let width = (canvas.width = window.innerWidth);
 let height = (canvas.height = window.innerHeight);
 
+// Dinamik ölçüler
+let heartScale = Math.min(width, height) * 0.015;
 const fallingTexts = [];
 const heartStars = [];
 const meteors = [];
 
 let heartBeat = 1;
-let heartScale = Math.min(width, height) * 0.015;
-// mesajlar
+
+// Mesajlar
 const messages = [
   "Seni Seviyorum 💖",
   "Aşkım benim 🌹",
@@ -57,9 +59,10 @@ function createFallingText() {
 }
 
 // Kalp şeklinde yıldızlar
-function createHeartStars(count = 6000) {
+function createHeartStars(count = Math.floor(Math.min(width, height) * 0.2)) {
   const centerX = width / 2;
   const centerY = height / 2 + 20;
+
   for (let i = 0; i < count; i++) {
     const t = (i / count) * Math.PI * 2;
     const heart = heartShape(t, heartScale);
@@ -141,6 +144,7 @@ function animate() {
     ctx.lineTo(m.x - dx, m.y - dy);
     ctx.stroke();
     ctx.restore();
+
     m.x += Math.cos(m.angle) * m.speed;
     m.y += Math.sin(m.angle) * m.speed;
     m.alpha -= 0.005;
@@ -159,10 +163,7 @@ function animate() {
 
     t.y += t.speed;
     t.alpha -= 0.002;
-
-    if (t.y > height + 30 || t.alpha <= 0) {
-      fallingTexts.splice(i, 1);
-    }
+    if (t.y > height + 30 || t.alpha <= 0) fallingTexts.splice(i, 1);
   });
 
   requestAnimationFrame(animate);
@@ -172,6 +173,7 @@ function animate() {
 window.addEventListener("resize", () => {
   width = canvas.width = window.innerWidth;
   height = canvas.height = window.innerHeight;
+  heartScale = Math.min(width, height) * 0.015;
 });
 
 // Başlat
